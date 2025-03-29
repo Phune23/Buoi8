@@ -36,7 +36,42 @@ module.exports = {
     ],
     LoginValidator: [
         body("username").isLength(options.username).withMessage("username hoac password sai"),
-        body("password").isStrongPassword(option.password).withMessage("username hoac password sai")
+        body("password").isStrongPassword(options.password).withMessage("username hoac password sai")
+    ],
+    ChangePasswordValidator: [
+        body("newpassword").isStrongPassword(options.password).withMessage(util.format(constants.VALIDATOR_ERROR_PASSWORD,
+            options.password.minLength,
+            options.password.minLowercase,
+            options.password.minUppercase,
+            options.password.minNumbers,
+            options.password.minSymbols))
+    ],
+    ForgotPasswordValidator: [
+        body("email").isEmail().withMessage(constants.VALIDATOR_ERROR_EMAIL)
+    ],
+    ResetPasswordValidator: [
+        body("password").isStrongPassword(options.password).withMessage(util.format(constants.VALIDATOR_ERROR_PASSWORD,
+            options.password.minLength,
+            options.password.minLowercase,
+            options.password.minUppercase,
+            options.password.minNumbers,
+            options.password.minSymbols))
+    ],
+    CreateUserValidator: [
+        body("username").isLength(options.username).withMessage(util.format(constants.VALIDATOR_ERROR_USERNAME, options.username.minLength)),
+        body("password").isStrongPassword(options.password).withMessage(util.format(constants.VALIDATOR_ERROR_PASSWORD,
+            options.password.minLength,
+            options.password.minLowercase,
+            options.password.minUppercase,
+            options.password.minNumbers,
+            options.password.minSymbols)),
+        body("email").isEmail().withMessage(constants.VALIDATOR_ERROR_EMAIL),
+        body("role").isIn(['user', 'admin']).withMessage("Invalid role")
+    ],
+    UpdateUserValidator: [
+        body("username").optional().isLength(options.username).withMessage(util.format(constants.VALIDATOR_ERROR_USERNAME, options.username.minLength)),
+        body("email").optional().isEmail().withMessage(constants.VALIDATOR_ERROR_EMAIL),
+        body("role").optional().isIn(['user', 'admin']).withMessage("Invalid role")
     ]
 }
 // multer
